@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PadelMatch - Registro</title>
+</head>
+<body>
+
+    <h1> Crear cuenta</h1>
+
+    <form id="form-registro">
+        <label for="nombre">Nombre de usuario</label>
+        <input type="text" id="nombre" placeholder="tu nombre" required>
+        
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="tu@email.com" required>
+
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" placeholder="••••••••" required>
+
+        <label for="nivel">Nivel de juego</label>
+        <select id="nivel">
+            <option value="">Selecciona tu nivel</option>
+            <option value="1.0">1.0 - Iniciación</optioin>
+            <option value="2.0">2.0 - Básico</option>
+            <option value="3.0">3.0 - Intermedio</option>
+            <option value="4.0">4.0 - Avanzado</option>
+            <option value="5.0">5.0 - Competición</option>
+        </select>
+        <button type="submit">Registrarse</button>
+    </form>
+    
+    <script src="js/registro.js"></script>
+</body>
+</html>
