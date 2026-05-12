@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:16
+    image: supabase/postgres:17.6.1.096
     restart: unless-stopped
     ports:
       - 5432:5432
@@ -8,6 +8,8 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
+      JWT_SECRET: reallyreallyreallyreallyverysafe
+      JWT_EXP: 3600
     volumes:
       - data:/var/lib/postgresql/data
       - ./initdb:/docker-entrypoint-initdb.d
@@ -33,7 +35,7 @@ services:
     image: postgrest/postgrest
     restart: unless-stopped
     environment:
-      PGRST_DB_URI: postgres://postgres:postgres@db:5432/postgres
+      PGRST_DB_URI: postgres://authenticator:postgres@db:5432/postgres
       PGRST_DB_SCHEMAS: public
       PGRST_DB_ANON_ROLE: anon
       PGRST_JWT_SECRET: reallyreallyreallyreallyverysafe

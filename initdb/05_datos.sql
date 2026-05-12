@@ -11,6 +11,13 @@ INSERT INTO Pista (id_club, nombre_pista, tipo) VALUES
 (2, 'Pista Exterior Panorámica', 'Exterior'),
 (3, 'Pista Cubierta 1', 'Cubierta');
 
+-- 3. Insertar Usuarios (en ambas tablas)
+SELECT signup('marc@padel.com', '1234', 'Marc Entrenador', 5.0);
+SELECT signup('ana@gmail.com', '1234', 'Ana García', 3.5);
+SELECT signup('david@yahoo.es', '1234', 'David López', 2.0);
+SELECT signup('laura@ooutlook.com', '1234', 'Laura Martínez', 4.2);
+
+/* 
 -- 3. Insertar Usuarios
 INSERT INTO Usuarios (nombre_usuario, email_usuario, password_usuario, nivel) VALUES 
 ('Marc Entrenador', 'marc@padel.com', 'scrypt_o_texto_plano', 5.0),
@@ -18,6 +25,7 @@ INSERT INTO Usuarios (nombre_usuario, email_usuario, password_usuario, nivel) VA
 ('David López', 'david@yahoo.es', '1234', 2.0),
 ('Laura Martínez', 'laura@outlook.com', '1234', 4.2),
 ('Usuario Invitado', 'invitado@test.com', '1234', 1.5);
+*/
 
 -- 4. Insertar Reservas (Partidas)
 -- Escenario A: Partida completa
@@ -31,3 +39,11 @@ VALUES (3, 4, 1, '2026-05-15', '19:30:00', 4.50);
 -- Escenario C: Partida recién creada (Solo el creador)
 INSERT INTO RESERVAS (id_pista, id_usuario_creador, fecha, hora, nivel_partida) 
 VALUES (4, 3, '2026-05-16', '10:00:00', 2.50);
+
+/* 
+
+La diferencia clave es que ahora en lugar de hacer INSERT INTO usuarios directamente, 
+usamos SELECT signup() que es la función que creamos en el 03_auth.sql.
+Así cada usuario queda registrado en basic_auth.users y en public.usuarios a la vez 
+
+*/

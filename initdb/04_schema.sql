@@ -36,7 +36,7 @@ CREATE TABLE RESERVAS (
     id_jd4 INT DEFAULT NULL,
     fecha DATE NOT NULL,
     hora TIME NOT NULL,
-    nivel_partida DECIMAL(2,1), -- 4 dígitos de los cuales 2 son decimales (osea 2 enteros y 2 decimales)
+    nivel_partida DECIMAL(2,1), -- 2 dígitos de los cuales 1 son decimales 
 
     FOREIGN KEY (id_pista) REFERENCES Pista(id_pista),
     FOREIGN KEY (id_usuario_creador) REFERENCES Usuarios (id_usuario) ON DELETE CASCADE, -- EL CREADOR EN CASCADE porque si se borra, se borra la partida/reserva
@@ -46,7 +46,19 @@ CREATE TABLE RESERVAS (
 
     CONSTRAINT reserva_unica UNIQUE (id_pista, fecha, hora)
 );
-
+-- Está la opción de añadir la política de que solo el creador puede borrar su reserva 
+/*
+-- Solo esto necesitarías en reservas
+CREATE POLICY "Solo el creador puede borrar su reserva"
+ON public.reservas FOR DELETE TO web_user
+USING (
+    id_usuario_creador = (
+        SELECT id_usuario FROM public.usuarios 
+        WHERE email_usuario = current_setting('request.jwt.claims', true)::json->>'email'
+    )
+);
+*/
+-- PROBABLEMENTE BORRAR LOS PERMISOS DE AQUÍ, YA QUE ESTÁN EN 06_permisos.sql
 -- Permisos para anon (no autenticados): solo ver el tablón
 GRANT SELECT ON public.clubs TO anon;
 GRANT SELECT ON public.pista TO anon;

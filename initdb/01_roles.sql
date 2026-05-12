@@ -2,6 +2,8 @@
 -- que lee la variable de entorno POSTGRES_PASSWORD del sistema y la guarda en la variable llamada pgpass,
 -- basicamente para no escribir la contraseña en texto plano en el archivo
 \set pgpass `echo "$POSTGRES_PASSWORD"`
+CREATE ROLE uthenticator WITH LOGIN PASSWORD :'pgpass';
+CREATE ROLE supabase_admin WITH LOGIN SUPERUSER;
 -- crea un usuario que postgREST usa para conectarse a la base de datos, es el intermediario entre PostgREST y PostgreSQL,
 -- tiene permiso de login porque necesita conectarse activamente
 CREATE ROLE authenticator WITH LOGIN PASSWORD :'pgpass';
