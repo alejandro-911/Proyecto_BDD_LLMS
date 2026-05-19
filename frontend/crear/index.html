@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PadelMatch - Crear partida</title>
+</head>
+<body>
+
+    <h1>Crear partida</h1>
+
+    <form id="form-crear">
+        <label for="club">Club</label>
+        <select id="club" required>
+            <option value="">Selecciona un club</option>
+        </select>
+
+        <label for="pista">Pista</label>
+        <select id="pista" required>
+            <option value="">Selecciona una pista</option>
+        </select>
+
+        <label for="fecha">Fecha</label>
+        <input type="date" id="fecha" required>
+
+        <label for="hora">Hora</label>
+        <input type="time" id="hora" required>
+
+        <label for="nivel">Nivel de la partida</label>
+        <select id="nivel" required>
+            <option value="">Selecciona el nivel</option>
+            <option value="1.0">1.0 - Iniciación</option>
+            <option value="2.0">2.0 - Básico</option>
+            <option value="3.0">3.0 - Intermedio</option>
+            <option value="4.0">4.0 - Avanzado</option>
+            <option value="5.0">5.0 - Competición</option>
+        </select>
+
+        <button type="submit">Crear partida</button>
+    </form>
+
+    <p id="mensaje-error"></p>
+
+    <a href="/tablon/">Volver al tablón</a>
+
+    <script type="module" src="/src/crearPartida.js"></script>
+</body>
+</html>
