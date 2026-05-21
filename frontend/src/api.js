@@ -32,8 +32,16 @@ export async function signup(email, pass, nombre, nivel) {
 // --- RESERVAS (PARTIDAS) ---
 
 export async function getReservas() {
+  // metemos el token para ver las reservas
   // PostgREST permite traer datos relacionados (Clubs, Pistas) en una sola consulta
-  const response = await fetch(`${apiUrl}/reservas?select=*,pista(nombre_pista,clubs(nombre_club))`);
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${apiUrl}/reservas?select=*,pista(nombre_pista,clubs(nombre_club)),creador:usuarios!id_usuario_creador(nombre_usuario),jd2:usuarios!id_jd2(nombre_usuario),jd3:usuarios!id_jd3(nombre_usuario),jd4:usuarios!id_jd4(nombre_usuario)`, {
+    headers: {
+      "Authorization": `Bearer ${token}` // 
+    }
+  }
+    
+  );
   return await response.json();
 }
 

@@ -26,7 +26,7 @@ document.getElementById("club").addEventListener("change", async function() {
 
     // Filtramos las pistas por club
     const pistas = await getPistas();
-        console.log("Pistas recibidas:", pistas); // 👈
+        //console.log("Pistas recibidas:", pistas); // 👈
 
     const pistasFiltradas = pistas.filter(function(p) {
         return p.id_club == idClub;
@@ -79,7 +79,34 @@ document.getElementById("form-crear").addEventListener("submit", async function(
         // Si se crea bien, volvemos al tablón
         window.location.replace("/tablon/");
     } catch (error) {
-        document.getElementById("mensaje-error").textContent = "Error al crear la partida: " + error.message;
+        // Empezamos con un mensaje genérico por defecto
+        // si algo falla antes de llegar al mensaje específico, se mostrará este
+        // usamos let porque el valor de mensaje puede cambiar (empieza siendo genérico)
+        let mensaje = "Error al crear la partida";
+
+        // Comprobamos ue el error tiene mensaje
+        // (por si acaso llega error vacío o raro)
+        // Intentamos sacar el mensaje del error de PostgreSQL
+        if(error.message) {
+
+            // error.message llega así como texto:
+            // '{"code":"P0001","message":"La pista ya está ocupada en ese horario"}'
+            // JSON.parse lo convierte en un objeto JavaScript para poder leer sus propiedades
+            const errObj = JSON.parse(error.message);
+
+            // Ahora errObj es un objeto normal y podemos leer errObj.code y errObj.message
+            // P0001 → error lanzado por el trigger de solapamiento
+            // 23505 → error lanzado por la constraint UNIQUE de la BDD
+            // 23505 es pista ya ocupada exacta
+            if (errObj.code === "P0001" || errObj.code === "23505") {
+                // Sobreescribimos el mensaje genérico con el mensaje específico de PostgreSQL
+                mensaje = errObj.message;
+            }
+        }
+        // Mostramos el mensaje en el párrafo del HTML
+        // Será el específico si era un error conocido, o el genérico si no
+        document.getElementById("mensaje-error").textContent = mensaje;
+    
     }
 });
 
