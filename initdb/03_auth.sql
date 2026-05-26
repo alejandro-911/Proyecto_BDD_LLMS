@@ -110,4 +110,31 @@ GRANT EXECUTE ON FUNCTION signup(TEXT, TEXT, TEXT, DECIMAL) TO anon;
 -- e inserta en dos tablas a la vez para la autenticación (basic_auth.users)
 -- y para los datos del jugador  (public.usuarios)
 
+-- FUNCIÓN SIGN UP PARA REGISTRAR CLUBS:
 
+-- en vez de insertar en public.usuarios, inserta en public.clubs
+-- el rol que guarda en basic_auth.users es club_admin en vez de web_user
+
+-- Así cuando el club haga login, el TOKEN JWT que recibe tiene role: club_admin dentro
+-- y PostgREST sabe que tiene permisos de club
+CREATE FUNCTION signup_club(
+    email TEXT,
+    pass TEXT,
+    nombre_club TEXT,
+    ciudad TEXT
+) RETURNS VOID LANGUAGE plpgsql SECURITY DEFINER AS $function$
+DECLARE
+    nuevo_id_club INT;
+BEGIN
+    -- Inserta el club y recoge su id
+    INSERT INTO public.clubs (nombre_club, ciudad, email_admin)
+    VALUES (nombre_club, ciudad, email)
+    RETURNING id_club INTO nuevo_id_club;
+
+    -- Inserta en basic_auth con rol club_admin
+    INSERT INTO basic_auth.users (email, pass, role)
+    VALUES (signup_club.email, signup_club.pass, 'club_admin');
+END
+$function$;
+
+GRANT EXECUTE ON FUNCTION signup_club(TEXT, TEXT, TEXT, TEXT) TO anon;

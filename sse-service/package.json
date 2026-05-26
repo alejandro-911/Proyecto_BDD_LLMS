@@ -1,0 +1,8 @@
+{
+  "name": "sse-service",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.18.0",
+    "pg": "^8.11.0"
+  }
+}

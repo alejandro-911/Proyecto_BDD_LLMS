@@ -19,3 +19,5 @@ $$;
 CREATE TRIGGER trigger_solapamiento
 BEFORE INSERT ON reservas
 FOR EACH ROW EXECUTE FUNCTION check_solapamiento();
+
+-- Para validar el nivel de un jugador

@@ -3,7 +3,10 @@
 CREATE TABLE Clubs (
     id_club SERIAL PRIMARY KEY,
     nombre_club VARCHAR (255) NOT NULL,
-    ciudad VARCHAR (255) NOT NULL
+    ciudad VARCHAR (255) NOT NULL,
+    email_admin VARCHAR(255) UNIQUE
+    -- para sabr que email corresponde a que club. 
+    -- para que cuando inicie sesión se le muestren solo sus pistas, no las de todos
 );
 
 -- definición del tipo de ENUM
@@ -37,6 +40,7 @@ CREATE TABLE RESERVAS (
     fecha DATE NOT NULL,
     hora TIME NOT NULL,
     nivel_partida DECIMAL(2,1), -- 2 dígitos de los cuales 1 son decimales 
+    origen VARCHAR(20) DEFAULT 'app' CHECK(origen IN ('app', 'club')),
 
     FOREIGN KEY (id_pista) REFERENCES Pista(id_pista),
     FOREIGN KEY (id_usuario_creador) REFERENCES Usuarios (id_usuario) ON DELETE CASCADE, -- EL CREADOR EN CASCADE porque si se borra, se borra la partida/reserva

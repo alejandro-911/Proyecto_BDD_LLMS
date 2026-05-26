@@ -6,6 +6,7 @@ services:
     command: npm run dev -- --host
     environment:
       VITE_API_URL: http://localhost:3000
+      VITE_EVENTS_URL: http://localhost:3001/events
     ports:
       - "5173:5173"
     develop:
@@ -22,6 +23,23 @@ services:
           target: /app
         - action: rebuild
           path: ./frontend/package.json
+  sse:
+    build:
+      context: ./sse-service
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      PGHOST: db
+      PGPORT: 5432
+      PGDATABASE: ${POSTGRES_DB:-postgres}
+      PGUSER: postgres
+      PGPASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      PG_CHANNEL: reservas_changes
+    depends_on:
+      db:
+        condition: service_healthy
   db:
     image: supabase/postgres:17.6.1.096
     restart: unless-stopped

@@ -47,6 +47,9 @@ async function cargarReservas() {
             <p>Nivel: ${reserva.nivel_partida}</p>
             <p>Huecos libres: ${huecos}/3</p>
         `;
+        // ***REVISAR ****
+        //  ${reserva.origen === 'club' ? '<p><strong>⚠️Reservada por el club</strong></p>' : ''}
+
 
         // Botón cancelar — solo si eres el creador
         if (idUsuario && reserva.id_usuario_creador === idUsuario) {
@@ -128,4 +131,18 @@ async function cargarReservas() {
 // cargamos las resrevas al entrar
 cargarReservas();
 // polling que refresca cada 5 segundos
-setInterval(cargarReservas, 5000);
+// setInterval(cargarReservas, 5000);
+
+// en vez de polling, esto:
+
+// new EventSource(url) --> abre una conexión permanente con el servidor SSE (el sse-service)
+// Es como si el navegador dejara un "hilo" abierto escuchando, en vez de preguntar cada x segundos
+
+const eventSource = new EventSource(import.meta.env.VITE_EVENTS_URL);
+
+// cuando PostgreSQL hace un INSERT, el trigger lanza un NOTIFY, el sse-service lo recibe y lo manda al navegador como un evento llamado "insert"
+// Este listener lo captura y llama a cargarReservas()
+// lo mismo con "update" y "delete"
+eventSource.addEventListener("insert", () => cargarReservas());
+eventSource.addEventListener("update", () => cargarReservas());
+eventSource.addEventListener("delete", () => cargarReservas());

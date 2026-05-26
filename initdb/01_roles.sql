@@ -17,5 +17,12 @@ CREATE ROLE web_user;
 -- Le dice a PostgreSQL que authenticator puede actuar en nombre de anon y web_user.
 -- Cuando llega una petición PostgREST entra como autenticator y 
 -- luego cambia al rol correspondiente según el token JWT.
+CREATE ROLE club_admin; 
+-- crea el rol club_admin
+
 GRANT anon TO authenticator;
 GRANT web_user TO authenticator;
+GRANT club_admin TO authenticator; 
+-- le dice a authenticator que puede actuar como club_admin
+-- sin el GRANT, si alguien hace loguin como club, postgREST no podría cambiar al rol de club admin y daría error
+
