@@ -37,3 +37,42 @@ GRANT EXECUTE ON FUNCTION signup_club(TEXT, TEXT, TEXT, TEXT) TO anon;
 -- GRANT EXECUTE ON FUNCTION signup_club(TEXT, TEXT, TEXT, TEXT) TO anon;
 -- sin estar registrado necesitas como mínimo registrarse y hacer login
 -- sino nadie podría entrar en la app nunca
+
+-- para que club_admin pueda SELECT, INSERT, UPDATE, DELETE ON public.reservas TO club_admin
+-- lo pueda hacer pero en sus pistas, no en la de todos los clubs
+-- Para ello:
+-- activamos RLS en la tabla 
+ALTER TABLE public.reservas ENABLE ROW LEVEL security;
+-- Política: club_admin solo ve/modifica reservas de sus pistas
+CREATE POLICY "club_admin_solo_sus_reservas"
+ON public.reservas
+TO club_admin
+USING (
+    id_pista IN (
+        SELECT p.id_pista FROM public.pista p
+        JOIN public.clubs c ON c.id_club = p.id_club
+        WHERE c.email_admin = current_setting('request.jwt.claims', true)::json->>'email'
+    )
+);
+/* 
+Lo que hace es que cada vez qiie club_admin hace una consulta,
+PostgreSQL fitra automátiamente las filas comprobando qu ela pista de esa reseva pertenece al club cuyo 
+email_admin coincide con el email del token JWT
+
+Club A hace GET /reservas
+        ↓
+PostgreSQL comprueba el email del JWT
+        ↓
+Solo devuelve reservas de pistas del Club A
+*/
+-- Política para web_user para que pueda seguir viendo todas las reservas y modificarlas (el RLS no le restringe)
+CREATE POLICY "web_user_todas_las_reservas"
+ON public.reservas
+TO web_user
+USING (true); -- true significa que no filtra nada , ve todo
+
+-- Política para anon, puede ver todas las reservas del tablón
+CREATE POLICY "anon_ver_reservas"
+ON public.reservas
+TO anon
+USING (true);
