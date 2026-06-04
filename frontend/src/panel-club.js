@@ -50,9 +50,16 @@ async function cargarPistasDelClub() {
 
 // Cargamos las reservas de las pistas del club
 async function cargarReservas(idClub) {
-    // Traemos las reservas filtrando por las pistas del club
+    // Primero obtenemos las pistas del club
+    const respPistas = await fetch(`${apiUrl}/pista?id_club=eq.${idClub}&select=id_pista`, {
+        headers: { "Authorization": `Bearer ${token}` }
+    });
+    const pistas = await respPistas.json();
+    const idsPistas = pistas.map(p => p.id_pista).join(",");
+
+    // Luego traemos las reservas de esas pistas
     const respuesta = await fetch(
-        `${apiUrl}/reservas?select=*,pista(nombre_pista)&pista.id_club=eq.${idClub}`,
+        `${apiUrl}/reservas?id_pista=in.(${idsPistas})&select=*,pista(nombre_pista)`,
         { headers: { "Authorization": `Bearer ${token}` } }
     );
     const reservas = await respuesta.json();
@@ -61,13 +68,21 @@ async function cargarReservas(idClub) {
 
     reservas.forEach(function(reserva) {
         const div = document.createElement("div");
+        // Contamos los huecos libres igual que en el tablón
+        const jugadores = [reserva.id_jd2, reserva.id_jd3, reserva.id_jd4];
+        let huecos = 0;
+        for (let i = 0; i < jugadores.length; i++) {
+            if(jugadores[i] === null) {
+                huecos++; // si alguno es libre suma 1
+            }
+        }
         div.innerHTML = `
             <p><strong>${reserva.pista.nombre_pista}</strong></p>
             <p>Fecha: ${reserva.fecha} | Hora: ${reserva.hora}</p>
             <p>Origen: ${reserva.origen === "club" ? "📞 Reserva telefónica" : "📱 Reserva desde la app"}</p>
+            ${reserva.origen === "app" ? `<p>Huecos libres: ${huecos}/3</p>` : ""}
         `;
 
-        // Botón cancelar reserva
         const btnCancelar = document.createElement("button");
         btnCancelar.textContent = "Cancelar reserva";
         btnCancelar.addEventListener("click", async function() {
@@ -88,7 +103,7 @@ document.getElementById("form-reserva-manual").addEventListener("submit", async 
 
     const reserva = {
         id_pista: parseInt(document.getElementById("pista").value),
-        id_usuario_creador: 1, // reserva del club, usamos un id fijo
+        id_usuario_creador: null, // reserva del club, no tiene jugador creador
         fecha: document.getElementById("fecha").value,
         hora: document.getElementById("hora").value,
         nivel_partida: 0,
@@ -116,3 +131,11 @@ document.getElementById("form-reserva-manual").addEventListener("submit", async 
 // Arrancamos cargando las pistas y las reservas
 const idClub = await cargarPistasDelClub();
 cargarReservas(idClub);
+
+// LISTENERS
+// Así cuando un jugador cancela su reserva, el panel del club se actualiza automáticamenete igual que el tablón
+const eventSource = new EventSource(import.meta.env.VITE_EVENTS_URL);
+
+eventSource.addEventListener("insert", () => cargarReservas(idClub));
+eventSource.addEventListener("update", () => cargarReservas(idClub));
+eventSource.addEventListener("delete", () => cargarReservas(idClub));

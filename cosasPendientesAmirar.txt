@@ -1,0 +1,5 @@
+- me deja reservar desde la app dentro de la hora que dura una partida ya reservada por el club
+
+- borrar lo relacionado con el registro de clubs ya que contaremos con clubs ya en la bdd
+	* esto hace que no debamos registrar clubs 	*teniendo que además registrar pistas,etc.
+

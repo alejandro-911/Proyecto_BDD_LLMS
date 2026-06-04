@@ -30,12 +30,17 @@ async function getIdUsuario() {
 // Función principal que carga y pinta las reservas
 async function cargarReservas() {
     const reservas = await getReservas();
-    console.log("Resrvas recibidas:", reservas);
+
+    // Filtramos las reservas del club, esas no se muestran a los jugadores (no se muestran en el tablon, se bloquean con el trigger de solapamiento y ya)
+    const reservasJugadores = reservas.filter(function(r) {
+        return r.origen === "app";
+    });
+
     const idUsuario = await getIdUsuario();
     const lista = document.getElementById("lista-partidas");
     lista.innerHTML = "";
 
-    reservas.forEach(function(reserva) {
+    reservasJugadores.forEach(function(reserva) {
         // Contamos los huecos libres
         const jugadores = [reserva.id_jd2, reserva.id_jd3, reserva.id_jd4];
         const huecos = jugadores.filter(function(j) { return j === null; }).length;
@@ -47,9 +52,6 @@ async function cargarReservas() {
             <p>Nivel: ${reserva.nivel_partida}</p>
             <p>Huecos libres: ${huecos}/3</p>
         `;
-        // ***REVISAR ****
-        //  ${reserva.origen === 'club' ? '<p><strong>⚠️Reservada por el club</strong></p>' : ''}
-
 
         // Botón cancelar — solo si eres el creador
         if (idUsuario && reserva.id_usuario_creador === idUsuario) {

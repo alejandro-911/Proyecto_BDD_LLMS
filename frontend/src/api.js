@@ -84,7 +84,8 @@ export async function getPistas() {
   const response = await fetch(`${apiUrl}/pista`);
   return await response.json();
 }
-
+// se podri quitar porque no da para registrar clubs y se creen sus pistas por ahora, asique 
+// Asi que por ahora contaremos con los clubs que ya constan en la BDD
 // --- FUNCIÓN signupClub() ---
 // Es IGUAL que con los jugadores, cambia que llama a rpc/signup_club en vez de rpc/sinup
 export async function signupClub(email, pass, nombre_club, ciudad) {
