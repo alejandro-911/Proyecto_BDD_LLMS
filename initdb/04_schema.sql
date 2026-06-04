@@ -33,7 +33,7 @@ CREATE TABLE Usuarios (
 CREATE TABLE RESERVAS (
     id_reserva SERIAL PRIMARY KEY,
     id_pista INT NOT NULL,
-    id_usuario_creador INT NOT NULL,
+    id_usuario_creador INT DEFAULT NULL, -- Así las reservas del club no tienen creador (evitar inventarse un usuario ficticio)
     id_jd2 INT DEFAULT NULL,
     id_jd3 INT DEFAULT NULL,
     id_jd4 INT DEFAULT NULL,

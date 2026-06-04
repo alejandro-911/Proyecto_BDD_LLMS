@@ -84,3 +84,14 @@ export async function getPistas() {
   const response = await fetch(`${apiUrl}/pista`);
   return await response.json();
 }
+
+// --- FUNCIÓN signupClub() ---
+// Es IGUAL que con los jugadores, cambia que llama a rpc/signup_club en vez de rpc/sinup
+export async function signupClub(email, pass, nombre_club, ciudad) {
+    const response = await fetch(`${apiUrl}/rpc/signup_club`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, pass, nombre_club, ciudad }),
+    });
+    if (!response.ok) throw new Error("Error en el registro: el club ya existe");
+}
