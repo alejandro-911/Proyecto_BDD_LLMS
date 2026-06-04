@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content=""width=device-width, initial-scale="1.0">
     <title>PadelMatch - Login</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="./style.css"> <!-- ./style con punto al principio significa en la misma carpeta -->
 </head>
 <body>
-
-    <h1>Iniciar sesión</h1>
+    <div class="contenedor">
+            <h1>Iniciar sesión</h1>
 
     <form id="form-login">
         <label for="email">Email</label>
@@ -25,7 +25,11 @@
 
         <p>No tienes cuenta? <a href="/">Regístrate</a></p>
 
-        <script type="module" src="/src/login.js"></script>
+
+    </div>
+
+
+    <script type="module" src="/src/login.js"></script>
 
 </body>
 </html>
