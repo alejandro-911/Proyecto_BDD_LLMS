@@ -21,3 +21,22 @@ BEFORE INSERT ON reservas
 FOR EACH ROW EXECUTE FUNCTION check_solapamiento();
 
 -- Para validar el nivel de un jugador
+
+-- REGLA DE NEGOCIO: no permitir reservas a partir de las 23:30
+-- En 07_validaciones.sql añades:
+CREATE OR REPLACE FUNCTION check_horario()
+RETURNS TRIGGER LANGUAGE plpgsql AS $$
+BEGIN
+    IF NEW.hora > '23:30:00' THEN
+        RAISE EXCEPTION 'No se puede reservar después de las 23:30';
+    END IF;
+    IF NEW.hora < '06:00:00' THEN
+    RAISE EXCEPTION 'No se puede reservar antes de las 6:00';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trigger_horario
+BEFORE INSERT ON reservas
+FOR EACH ROW EXECUTE FUNCTION check_horario();

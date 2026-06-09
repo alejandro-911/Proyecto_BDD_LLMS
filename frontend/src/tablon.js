@@ -54,6 +54,7 @@ async function cargarReservas() {
         `;
 
         // Botón cancelar — solo si eres el creador
+        
         if (idUsuario && reserva.id_usuario_creador === idUsuario) {
             const btnCancelar = document.createElement("button");
             btnCancelar.textContent = "Cancelar partida";
