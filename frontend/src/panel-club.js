@@ -111,7 +111,7 @@ document.getElementById("form-reserva-manual").addEventListener("submit", async 
     };
 
     try {
-        await fetch(`${apiUrl}/reservas`, {
+        const response = await fetch(`${apiUrl}/reservas`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -120,6 +120,14 @@ document.getElementById("form-reserva-manual").addEventListener("submit", async 
             },
             body: JSON.stringify(reserva)
         });
+    
+        // si la respuesta HTTP respecto a la reserva, es false, hubo algún error (400, 409, 500...) pues muestra un mensaje de error
+        if(!response.ok) {
+            const errorData = await response.json();
+            document.getElementById("mensaje-error").textContent = errorData.message;
+            return;
+        }
+        // si la respuesta HTTP respecto a la reserva fue true todo fue bien(códgo 200-299) muestra un mensaje de confirmación "añadida correctamente"
         document.getElementById("mensaje-error").textContent = "Reserva añadida correctamente";
         // Recargamos las reservas para ver el cambio
         cargarReservas(idClub);
