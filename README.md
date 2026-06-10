@@ -27,6 +27,9 @@ docker compose up --build
 
 ### Credenciales de prueba
 **Clubs:**
+Los clubs los daría de alta el administrador de la aplicación,
+en la bdd están estos 3 (correo / contraseña)
+
 - club1@padel.com / 1234
 - club2@padel.com / 1234
 - club3@padel.com / 1234
@@ -48,7 +51,6 @@ docker compose up --build
 - Un club puede cancelar cualquier reserva de sus pistas
 - Las reservas del club no aparecen en el tablón de jugadores
 
-## Diagrama Entidad-Relación
 ## Diagrama Entidad-Relación
 
 ```mermaid
