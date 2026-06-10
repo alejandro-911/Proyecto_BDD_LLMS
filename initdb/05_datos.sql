@@ -5,6 +5,9 @@ INSERT INTO Clubs (nombre_club, ciudad, email_admin) VALUES
 ('Padel Sant Boi', 'Sant Boi', 'club3@padel.com');
 
 -- 2. Insertar usuarios de los clubs en basic_auth (el trigger cifrará la pass)
+-- para que fuera seguro realmente deberia de registrarse un club desde la web con su funcion de signup
+-- pasando por un backend que cifre los datos antes de llegar a la bdd
+-- y no dejarlo en texto en el archivo datos.sql
 INSERT INTO basic_auth.users (email, pass, role) VALUES
 ('club1@padel.com', '1234', 'club_admin'),
 ('club2@padel.com', '1234', 'club_admin'),

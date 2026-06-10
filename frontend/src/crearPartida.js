@@ -26,7 +26,7 @@ document.getElementById("club").addEventListener("change", async function() {
 
     // Filtramos las pistas por club
     const pistas = await getPistas();
-        //console.log("Pistas recibidas:", pistas); // 👈
+        //console.log("Pistas recibidas:", pistas); // 
 
     const pistasFiltradas = pistas.filter(function(p) {
         return p.id_club == idClub;

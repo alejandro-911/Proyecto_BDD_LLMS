@@ -1,3 +1,7 @@
+// ***** NO SE USA *****
+
+// porque ya he dejado 3 ejemplos de INSERTS de clubs para hacer las pruebas 
+// dejo esto por si puede ser útil en un futuro
 import { signupClub } from "./api.js";
 
 document.getElementById("form-registro-club").addEventListener("submit", async function(evento) {
