@@ -35,6 +35,8 @@ export async function getReservas() {
   // metemos el token para ver las reservas
   // PostgREST permite traer datos relacionados (Clubs, Pistas) en una sola consulta
   const token = localStorage.getItem("token");
+  // lo de los jugadores demomento no se está usando (me refiero a mostrarlos en el tablón)
+  // para lo que si sirve demomento es: para extraer los datos del club y pista (que se vea en el tablón) y creador (para saber si añadir el botón de cancelar) para luego mostrarlos en el tablón con tablon.js 
   const response = await fetch(`${apiUrl}/reservas?select=*,pista(nombre_pista,clubs(nombre_club)),creador:usuarios!id_usuario_creador(nombre_usuario),jd2:usuarios!id_jd2(nombre_usuario),jd3:usuarios!id_jd3(nombre_usuario),jd4:usuarios!id_jd4(nombre_usuario)`, {
     headers: {
       "Authorization": `Bearer ${token}` // 

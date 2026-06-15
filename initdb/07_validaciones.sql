@@ -27,6 +27,10 @@ FOR EACH ROW EXECUTE FUNCTION check_solapamiento();
 CREATE OR REPLACE FUNCTION check_horario()
 RETURNS TRIGGER LANGUAGE plpgsql AS $$
 BEGIN
+    IF NEW.fecha < CURRENT_DATE OR 
+    (NEW.fecha = CURRENT_DATE AND NEW.hora < CURRENT_TIME) THEN
+        RAISE EXCEPTION 'No se puede reservar en una fecha pasada';
+    END IF;
     IF NEW.hora > '23:30:00' THEN
         RAISE EXCEPTION 'No se puede reservar después de las 23:30';
     END IF;

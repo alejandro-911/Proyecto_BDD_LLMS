@@ -12,6 +12,7 @@ CREATE TABLE basic_auth.users (
 );
 
 -- Función que comprueba que el rol existe 
+-- no es estrictamente necesario en mi proyecto
 CREATE FUNCTION basic_auth.check_role_exist()
 RETURNS TRIGGER LANGUAGE plpgsql AS $function$
 BEGIN
@@ -63,6 +64,7 @@ DECLARE
     _role NAME;
 BEGIN
     SELECT basic_auth.user_role(email, pass) INTO _role;
+    
     IF _role IS NULL THEN 
         RAISE invalid_password USING message = 'invalid user or password';
     END IF;

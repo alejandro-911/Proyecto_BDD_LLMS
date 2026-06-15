@@ -116,7 +116,7 @@ async function cargarReservas() {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${token}`
                         },
-                        // Ponemos el hueco a null para lierarlo
+                        // Ponemos el hueco a null para liberarlo
                         body: JSON.stringify({ [columna]: null })
                     });
                     cargarReservas();

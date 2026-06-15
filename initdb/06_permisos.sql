@@ -4,8 +4,8 @@ GRANT SELECT ON public.pista TO anon;
 GRANT SELECT ON public.reservas TO anon;
 
 -- web_user: puede hacer todo una vez autenticado
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.clubs TO web_user;
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.pista TO web_user;
+GRANT SELECT ON public.clubs TO web_user;
+GRANT SELECT ON public.pista TO web_user;
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.usuarios TO web_user;
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.reservas TO web_user;
 
@@ -51,7 +51,7 @@ USING (
     id_pista IN (
         SELECT p.id_pista FROM public.pista p
         JOIN public.clubs c ON c.id_club = p.id_club
-        WHERE c.email_admin = current_setting('request.jwt.claims', true)::json->>'email'
+        WHERE c.email_admin = current_setting('request.jwt.claims', true)::json->>'email' -- ->> siginifica extraer en texto plano TEXT // y -> extraer en formato json "club1@padel.com" con las comillas incluidas
     )
 );
 /* 
