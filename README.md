@@ -18,12 +18,36 @@ No es necesario configurar nada, el proyecto usa valores por defecto.
 ```bash
 docker compose up --build
 ```
-
-### URLs
+### URLs (local)
 - Aplicación: http://localhost:5173
 - API (PostgREST): http://localhost:3000
 - pgAdmin: http://localhost:8083
 - Swagger: http://localhost:8084
+
+---
+
+## Despliegue en servidor
+
+### Cambios realizados para el despliegue
+
+1. **`docker-compose.yml`**: puerto externo 80 → interno 5173 (frontend) y puerto externo 8080 → interno 3000 (PostgREST).
+2. **`vite.config.js`**: añadido `server.allowedHosts: true` y proxy para el servicio SSE.
+3. **Variables de entorno**: `VITE_API_URL` y `VITE_EVENTS_URL` apuntan al dominio del servidor.
+
+### Arrancar el proyecto en el servidor
+```bash
+git clone https://github.com/alejandro-911/Proyecto_BDD_LLMS.git
+cd Proyecto_BDD_LLMS
+docker compose up --build -d
+```
+
+### URLs (servidor)
+- Aplicación: http://server146.cfgs.esliceu.net
+- API (PostgREST): http://server146.cfgs.esliceu.net:8080
+- pgAdmin: http://server146.cfgs.esliceu.net:8083
+- Swagger: http://server146.cfgs.esliceu.net:8084
+
+---
 
 ### Credenciales de prueba
 **Clubs:**
